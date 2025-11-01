@@ -1,3 +1,4 @@
+[![Runpod](https://api.runpod.io/badge/weibeu/Hunyuan3D-2.1)](https://console.runpod.io/hub/weibeu/Hunyuan3D-2.1)
 
 <p align="center">
   <img src="assets/images/teaser.jpg">
