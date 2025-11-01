@@ -1,0 +1,44 @@
+{
+    "title": "Hunyuan3D-2.1",
+    "description": "Generate high-quality 3D meshes and textures from a single image using Tencent Hunyuan3D-2.1.",
+    "type": "serverless",
+    "category": "3d",
+    "iconUrl": "https://avatars.githubusercontent.com/u/1339699?s=200&v=4",
+    "config": {
+        "runsOn": "GPU",
+        "containerDiskInGb": 100,
+        "gpuIds": "AMPERE_48,ADA_48_PRO,AMPERE_80,ADA_80_PRO",
+        "gpuCount": 1,
+        "allowedCudaVersions": [
+            "12.4",
+            "12.5",
+            "12.6",
+            "12.7"
+        ],
+        "presets": [
+            {
+                "name": "Shape Only",
+                "defaults": {
+                    "MODEL_MODE": "shape"
+                }
+            },
+            {
+                "name": "Full Pipeline",
+                "defaults": {
+                    "MODEL_MODE": "full"
+                }
+            }
+        ],
+        "env": [
+            {
+                "key": "MODEL_MODE",
+                "input": {
+                    "type": "string",
+                    "name": "Generation Mode",
+                    "description": "Choose between shape-only or full textured mesh generation",
+                    "default": "full"
+                }
+            }
+        ]
+    }
+}
