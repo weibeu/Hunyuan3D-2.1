@@ -57,7 +57,7 @@ tqdm==4.66.5
 psutil==6.0.0
 
 # Blender
-bpy
+# bpy
 
 # ONNX Runtime
 onnxruntime==1.16.3
