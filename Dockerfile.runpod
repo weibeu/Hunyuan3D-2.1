@@ -9,6 +9,7 @@ ENV PYTHONUNBUFFERED=1
 ENV CUDA_HOME=/usr/local/cuda
 ENV PATH="${CUDA_HOME}/bin:${PATH}"
 ENV LD_LIBRARY_PATH="${CUDA_HOME}/lib64:${LD_LIBRARY_PATH}"
+ENV DISPLAY=:99
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -23,6 +24,13 @@ RUN apt-get update && apt-get install -y \
     libxext6 \
     libxrender-dev \
     libgomp1 \
+    libxi6 \
+    libxrandr2 \
+    libxfixes3 \
+    libxcursor1 \
+    libxinerama1 \
+    libxxf86vm1 \
+    xvfb \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -38,7 +46,12 @@ RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://
 # Install packages from requirements.txt (with version adjustments for PyPI availability)
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install bpy==4.0 --extra-index-url https://download.blender.org/pypi/ 
+RUN pip install bpy==4.0 --extra-index-url https://download.blender.org/pypi/ && \
+    python3 -c "import sys; print('Testing bpy import with virtual display...', file=sys.stderr)" && \
+    Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & \
+    sleep 2 && \
+    DISPLAY=:99 python3 -c "import bpy; print(f'✓ bpy {bpy.app.version_string} imported successfully', file=sys.stderr)" && \
+    pkill Xvfb 
 
 # Install packages not available on official PyPI using mirrors
 # tb_nightly from Tencent mirror
@@ -69,5 +82,5 @@ ENV SUBFOLDER=hunyuan3d-dit-v2-1
 HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
     CMD python3 -c "import torch; print(torch.cuda.is_available())" || exit 1
 
-# Start the RunPod handler
-CMD ["python3", "-u", "rp_handler.py"]
+# Start Xvfb and RunPod handler
+CMD ["/bin/bash", "-c", "Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 & sleep 1 && python3 -u rp_handler.py"]
