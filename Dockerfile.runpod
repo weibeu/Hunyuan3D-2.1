@@ -35,8 +35,19 @@ COPY requirements.txt .
 # Install PyTorch with CUDA support first
 RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
-# Install other Python dependencies
+# Install packages from requirements.txt (with version adjustments for PyPI availability)
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install packages not available on official PyPI using mirrors
+# tb_nightly from Tencent mirror
+RUN pip install --no-cache-dir \
+    --extra-index-url https://mirrors.cloud.tencent.com/pypi/simple/ \
+    tb_nightly==2.18.0a20240726
+
+# cupy-cuda12x from NVIDIA PyPI
+RUN pip install --no-cache-dir \
+    --extra-index-url https://pypi.nvidia.com \
+    cupy-cuda12x==13.4.1
 
 # Install RunPod SDK
 RUN pip install --no-cache-dir runpod

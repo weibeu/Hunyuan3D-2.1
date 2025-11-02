@@ -1,12 +1,20 @@
 # --extra-index-url https://mirrors.cloud.tencent.com/pypi/simple/
 # --extra-index-url https://mirrors.aliyun.com/pypi/simple
 
+# Note: Version adjustments made for PyPI availability:
+#   - transformers: 4.46.0 → 4.46.3 (closest patch version)
+#   - pymeshlab: 2022.2.post3 → 2023.12.post3 (closest available)
+#   - configargparse: 1.7 → 1.7.1 (closest patch version)
+# Packages not on official PyPI (install separately with mirrors):
+#   - tb_nightly==2.18.0a20240726
+#   - cupy-cuda12x==13.4.1
+
 # Build Tools
 ninja==1.11.1.1
 pybind11==2.13.4
 
 # Core ML/Deep Learning
-transformers==4.46.0
+transformers==4.46.3
 diffusers==0.30.0
 accelerate==1.1.1
 pytorch-lightning==1.9.5
@@ -25,12 +33,11 @@ imageio==2.36.0
 scikit-image==0.24.0
 rembg==2.0.65
 realesrgan==0.3.0
-tb_nightly==2.18.0a20240726
 basicsr==1.4.2
 
 # 3D Mesh Processing
 trimesh==4.4.7
-pymeshlab==2022.2.post3
+pymeshlab==2023.12.post3
 pygltflib==1.16.3
 xatlas==0.0.9
 open3d==0.18.0
@@ -38,7 +45,7 @@ open3d==0.18.0
 # Configuration Management
 omegaconf==2.3.0
 pyyaml==6.0.2
-configargparse==1.7
+configargparse==1.7.1
 
 # Web Framework (for demo)
 gradio==5.33.0
@@ -48,9 +55,6 @@ uvicorn==0.34.3
 # Utilities
 tqdm==4.66.5
 psutil==6.0.0
-
-# GPU Computing (requires CUDA)
-cupy-cuda12x==13.4.1
 
 # Blender
 bpy
