@@ -5,16 +5,15 @@
 
     LABEL name="hunyuan3d21-runpod" maintainer="you@example.com"
     
-    # Switch working directory to Hunyuan3D repo
     WORKDIR /workspace/Hunyuan3D-2.1
     
     # ------------------------------------------
-    # Install runtime deps inside existing env
-    # (The image already includes torch + all CUDA libs)
+    # Fix missing pip inside prebuilt conda env
     # ------------------------------------------
-    RUN /workspace/miniconda3/envs/hunyuan3d21/bin/pip install --no-cache-dir fastapi uvicorn runpod
+    RUN /workspace/miniconda3/envs/hunyuan3d21/bin/python -m ensurepip --upgrade && \
+        /workspace/miniconda3/envs/hunyuan3d21/bin/python -m pip install --no-cache-dir fastapi uvicorn runpod
     
-    # Copy your RunPod handler file
+    # Copy your handler
     COPY runpod_handler.py /workspace/Hunyuan3D-2.1/runpod_handler.py
     
     # ------------------------------------------
@@ -28,7 +27,7 @@
     ENV TORCH_CUDA_ARCH_LIST="6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0"
     
     # ------------------------------------------
-    # Run serverless handler
+    # Serverless entrypoint
     # ------------------------------------------
     CMD ["/workspace/miniconda3/envs/hunyuan3d21/bin/python", "runpod_handler.py"]
     
