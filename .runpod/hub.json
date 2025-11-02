@@ -1,44 +1,36 @@
 {
-    "title": "Hunyuan3D 2.1",
-    "description": "Generate high-quality 3D shapes and textures from a single image using Tencent's Hunyuan3D 2.1 pipeline.",
+    "title": "Hunyuan3D 2.1 Serverless",
+    "description": "Serverless API wrapper for Tencent Hunyuan3D 2.1 prebuilt image (generate 3D shape or textured mesh).",
     "type": "serverless",
     "category": "3d",
     "iconUrl": "https://avatars.githubusercontent.com/u/1339699?s=200&v=4",
     "config": {
-        "runsOn": "GPU",
-        "containerDiskInGb": 100,
-        "gpuCount": 1,
-        "gpuIds": "AMPERE_48,ADA_48_PRO,AMPERE_80,ADA_80_PRO",
-        "allowedCudaVersions": [
-            "12.4",
-            "12.5",
-            "12.6",
-            "12.7"
-        ],
-        "presets": [
-            {
-                "name": "Shape Only",
-                "defaults": {
-                    "MODEL_MODE": "shape"
-                }
-            },
-            {
-                "name": "Full Pipeline",
-                "defaults": {
-                    "MODEL_MODE": "full"
-                }
-            }
-        ],
-        "env": [
-            {
-                "key": "MODEL_MODE",
-                "input": {
-                    "name": "Generation Mode",
-                    "type": "string",
-                    "description": "Select between shape-only (10GB VRAM) or full texture pipeline (29GB VRAM)",
-                    "default": "full"
-                }
-            }
-        ]
+      "runsOn": "GPU",
+      "containerDiskInGb": 60,
+      "gpuCount": 1,
+      "gpuIds": "AMPERE_48,ADA_48_PRO,AMPERE_80,ADA_80_PRO",
+      "allowedCudaVersions": ["12.4", "12.5", "12.6", "12.7"],
+      "presets": [
+        {
+          "name": "Shape Only",
+          "defaults": { "MODE": "shape" }
+        },
+        {
+          "name": "Full Textured Mesh",
+          "defaults": { "MODE": "full" }
+        }
+      ],
+      "env": [
+        {
+          "key": "MODE",
+          "input": {
+            "name": "Pipeline Mode",
+            "type": "string",
+            "description": "Choose 'shape' for mesh only or 'full' for textured mesh.",
+            "default": "full"
+          }
+        }
+      ]
     }
-}
+  }
+  

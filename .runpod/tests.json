@@ -1,27 +1,21 @@
 {
     "tests": [
-        {
-            "name": "shape_generation_test",
-            "input": {
-                "input_image": "<base64_encoded_small_image>"
-            },
-            "timeout": 60000
-        }
+      {
+        "name": "shape_generation_test",
+        "input": {
+          "input_image": "<base64_encoded_png_here>",
+          "mode": "shape"
+        },
+        "timeout": 120000
+      }
     ],
     "config": {
-        "gpuTypeId": "NVIDIA GeForce RTX 4090",
-        "gpuCount": 1,
-        "env": [
-            {
-                "key": "MODEL_MODE",
-                "value": "shape"
-            }
-        ],
-        "allowedCudaVersions": [
-            "12.7",
-            "12.6",
-            "12.5",
-            "12.4"
-        ]
+      "gpuTypeId": "NVIDIA GeForce RTX 4090",
+      "gpuCount": 1,
+      "env": [
+        { "key": "MODE", "value": "shape" }
+      ],
+      "allowedCudaVersions": ["12.4", "12.5", "12.6", "12.7"]
     }
-}
+  }
+  

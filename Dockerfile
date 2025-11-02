@@ -1,75 +1,31 @@
-# ----------------------------
-# Base: Ubuntu + CUDA 12.4 + Dev Tools
-# ----------------------------
-FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+# ------------------------------------------
+# Base: Official Tencent prebuilt image
+# ------------------------------------------
+FROM registry.hf.space/tencent-hunyuan3d-2-1:latest
 
-ENV DEBIAN_FRONTEND=noninteractive
+LABEL name="hunyuan3d21-runpod" maintainer="you@example.com"
 
-# --- System dependencies (build tools, OpenGL, etc.)
-RUN apt update && apt install -y \
-    git wget curl python3.10 python3.10-venv python3-pip python3-dev \
-    build-essential gcc g++ make cmake ninja-build ffmpeg \
-    libgl1 libglib2.0-0 libgl1-mesa-dev libglu1-mesa-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Switch working directory to repo
+WORKDIR /workspace/Hunyuan3D-2.1
 
-WORKDIR /app
-COPY . /app
+# Install RunPod & FastAPI inside the same Conda env
+SHELL ["/bin/bash", "--login", "-c"]
+RUN conda activate hunyuan3d21 && \
+    pip install --no-cache-dir fastapi uvicorn runpod
 
-# ----------------------------
-# Python Environment
-# ----------------------------
-RUN pip install --upgrade pip setuptools wheel
+# Add your RunPod handler
+COPY runpod_handler.py /workspace/Hunyuan3D-2.1/runpod_handler.py
+# --- CUDA runtime paths ---
+ENV CUDA_HOME=/usr/local/cuda
+ENV PATH=${CUDA_HOME}/bin:${PATH}
+ENV LD_LIBRARY_PATH=${CUDA_HOME}/lib64:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}
+ENV TORCH_CUDA_ARCH_LIST="6.0;6.1;7.0;7.5;8.0;8.6;8.9;9.0"
 
-RUN pip install "setuptools<80" "pip<24"
-
-# --- Install PyTorch (CUDA 12.4 build)
-RUN pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 \
-    --index-url https://download.pytorch.org/whl/cu124
-
-# ----------------------------
-# Install dependencies
-# ----------------------------
-
-# Blender Python API (bpy) comes from Blender's own index
-RUN pip install --extra-index-url https://download.blender.org/pypi/ bpy==4.0
-
-# Optional environment flags to skip heavy CUDA ops in some libs
-ENV FORCE_CUDA=0
-ENV MMCV_WITH_OPS=0
-
-# Main Python requirements
-RUN pip install --prefer-binary -r requirements.txt
-
-# ----------------------------
-# Compile custom modules
-# ----------------------------
-
-# Avoid build isolation (torch visibility) + disable git version lookup
-ENV PIP_NO_BUILD_ISOLATION=1
-ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0
-
-# Compile Custom Rasterizer
-RUN cd hy3dpaint/custom_rasterizer && pip install -e . && cd ../..
-
-# Compile Differentiable Renderer (Docker-safe)
-RUN cd hy3dpaint/DifferentiableRenderer && bash compile_mesh_painter.sh && cd ../..
-
-# ----------------------------
-# Download ESRGAN checkpoint
-# ----------------------------
-RUN mkdir -p hy3dpaint/ckpt && \
-    wget -q https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth \
-    -P hy3dpaint/ckpt
-
-# ----------------------------
-# Install API runtime deps
-# ----------------------------
-RUN pip install fastapi uvicorn runpod
-
-# ----------------------------
-# Entrypoint
-# ----------------------------
-COPY runpod_handler.py /app/runpod_handler.py
+# Set environment variables
 ENV PYTHONUNBUFFERED=1
+ENV PYOPENGL_PLATFORM=egl
+ENV PATH="/workspace/miniconda3/envs/hunyuan3d21/bin:$PATH"
+ENV LD_LIBRARY_PATH="/workspace/miniconda3/envs/hunyuan3d21/lib:${LD_LIBRARY_PATH}"
 
-CMD ["python3", "runpod_handler.py"]
+# No ports needed; this is serverless
+CMD ["python", "runpod_handler.py"]
