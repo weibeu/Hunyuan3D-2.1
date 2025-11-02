@@ -2,8 +2,10 @@ FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
-    git wget python3.10 python3.10-venv python3-pip build-essential cmake ninja-build libgl1 libglib2.0-0 ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+    git wget python3.10 python3.10-venv python3-pip python3-dev \
+    build-essential cmake ninja-build libgl1 libglib2.0-0 \
+    libgl1-mesa-dev libglu1-mesa-dev ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY . /app
