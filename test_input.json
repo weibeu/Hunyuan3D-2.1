@@ -1,0 +1,8 @@
+{
+    "input": {
+        "image": "iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAEElEQVR4nGP8z4AATAxEcQAz0QEHOoQ+uAAAAABJRU5ErkJggg==",
+        "texture": true,
+        "remove_background": true,
+        "seed": 1234
+    }
+}
