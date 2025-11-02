@@ -3,7 +3,7 @@
 
 # Note: Version adjustments made for PyPI availability:
 #   - transformers: 4.46.0 → 4.46.3 (closest patch version)
-#   - pymeshlab: 2022.2.post3 → 2023.12.post3 (closest available)
+#   - pymeshlab: 2022.2.post3 → 2025.7 (closest available)
 #   - configargparse: 1.7 → 1.7.1 (closest patch version)
 # Packages not on official PyPI (install separately with mirrors):
 #   - tb_nightly==2.18.0a20240726
@@ -37,7 +37,7 @@ basicsr==1.4.2
 
 # 3D Mesh Processing
 trimesh==4.4.7
-pymeshlab==2023.12.post3
+pymeshlab==2025.7
 pygltflib==1.16.3
 xatlas==0.0.9
 open3d==0.18.0
