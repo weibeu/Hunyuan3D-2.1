@@ -38,6 +38,8 @@ RUN pip install --no-cache-dir torch torchvision torchaudio --index-url https://
 # Install packages from requirements.txt (with version adjustments for PyPI availability)
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install bpy==4.0 --extra-index-url https://download.blender.org/pypi/ 
+
 # Install packages not available on official PyPI using mirrors
 # tb_nightly from Tencent mirror
 RUN pip install --no-cache-dir \
