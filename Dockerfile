@@ -15,6 +15,9 @@ RUN pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url h
 ENV FORCE_CUDA=0
 ENV MMCV_WITH_OPS=0
 
+# --- Install bpy manually from Blender’s repo
+RUN pip install --extra-index-url https://download.blender.org/pypi/ bpy==4.0
+
 RUN pip install -r requirements.txt
 
 # --- Compile rasterizer and differentiable renderer
